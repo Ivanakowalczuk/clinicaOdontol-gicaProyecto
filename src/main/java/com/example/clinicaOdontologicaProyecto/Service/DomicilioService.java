@@ -1,6 +1,7 @@
 package com.example.clinicaOdontologicaProyecto.Service;
 
 import com.example.clinicaOdontologicaProyecto.configuration.MapperConfiguration;
+import com.example.clinicaOdontologicaProyecto.exceptions.ResourceNotFoundException;
 import com.example.clinicaOdontologicaProyecto.model.dto.DomicilioDto;
 import com.example.clinicaOdontologicaProyecto.model.dto.OdontologoDto;
 import com.example.clinicaOdontologicaProyecto.model.dto.PacienteDto;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DomicilioService implements ApiService<DomicilioDto> {
+public class DomicilioService implements IDomicilio<DomicilioDto> {
 
     @Autowired
     private MapperConfiguration mapper;
@@ -28,32 +29,26 @@ public class DomicilioService implements ApiService<DomicilioDto> {
     DomicilioRepository repository;
 
 
-    public DomicilioDto search(Integer id){
-        Optional<Domicilio> p = repository.findById(id);
-
-        return p.isPresent() ? mapper.getModelMapper().map(p.get(), DomicilioDto.class) : null;
-    }
-
-
-
-
-
-
     @Override
-    public DomicilioDto registerNew(DomicilioDto dto) throws ServiceException {
+    public DomicilioDto registrarNuevo(DomicilioDto dto) throws ResourceNotFoundException {
         Domicilio entidad = null;
 
         if(!dto.getCalle().isBlank()) {
             entidad = repository.save(mapper.getModelMapper().map(dto, Domicilio.class));
         }else{
-            throw new ServiceException("El paciente debe tener un domicilio");
+            throw new ResourceNotFoundException("El paciente debe tener un domicilio");
         }
 
         return mapper.getModelMapper().map(entidad, DomicilioDto.class);
     }
-
     @Override
-    public List<DomicilioDto> getAll() {
+    public DomicilioDto buscarPorId(Integer id){
+        Optional<Domicilio> p = repository.findById(id);
+
+        return p.isPresent() ? mapper.getModelMapper().map(p.get(), DomicilioDto.class) : null;
+    }
+    @Override
+    public List<DomicilioDto> buscarTodos() {
 
             List<DomicilioDto> resultado = new ArrayList<>();
 

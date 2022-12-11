@@ -1,9 +1,8 @@
 package com.example.clinicaOdontologicaProyecto.controller;
 
 import com.example.clinicaOdontologicaProyecto.Service.DomicilioService;
-import com.example.clinicaOdontologicaProyecto.Service.ServiceException;
+import com.example.clinicaOdontologicaProyecto.exceptions.ResourceNotFoundException;
 import com.example.clinicaOdontologicaProyecto.model.dto.DomicilioDto;
-import com.example.clinicaOdontologicaProyecto.model.dto.OdontologoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +20,9 @@ public class DomicilioController {
         ResponseEntity<Object> respuesta = null;
 
         try {
-            domicilio = service.registerNew(domicilio);
+            domicilio = service.registrarNuevo(domicilio);
             respuesta = ResponseEntity.ok(domicilio);
-        } catch (ServiceException ex) {
+        } catch (ResourceNotFoundException ex) {
             respuesta = ResponseEntity.badRequest().body(ex.getMessage());
         }
 

@@ -15,6 +15,8 @@ public class Odontologo {
     private String matricula;
 
     @Column
+    private String apellido;
+    @Column
     private String nombre;
 
     @OneToMany(mappedBy = "odontologo", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
@@ -30,6 +32,14 @@ public class Odontologo {
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getNombre() {

@@ -1,7 +1,7 @@
 package com.example.clinicaOdontologicaProyecto.controller;
 
-import com.example.clinicaOdontologicaProyecto.Service.ServiceException;
 import com.example.clinicaOdontologicaProyecto.Service.TurnoService;
+import com.example.clinicaOdontologicaProyecto.exceptions.ResourceNotFoundException;
 import com.example.clinicaOdontologicaProyecto.model.dto.TurnoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,13 @@ public class TurnoController {
     private TurnoService service;
 
     @PostMapping("/nuevo")
-    public ResponseEntity<Object> registerNew(@RequestBody TurnoDto turno){
+    public ResponseEntity<Object> registerNew(@RequestBody TurnoDto turno) throws ResourceNotFoundException {
         ResponseEntity<Object> respuesta = null;
 
         try {
-            turno = service.registerNew(turno);
+            turno = service.registrarTurno(turno);
             respuesta = ResponseEntity.ok(turno);
-        } catch (ServiceException ex) {
+        } catch (ResourceNotFoundException ex ) {
             respuesta = ResponseEntity.badRequest().body(ex.getMessage());
         }
 
@@ -30,9 +30,14 @@ public class TurnoController {
     }
 
     @GetMapping("/todos")
-    public ResponseEntity<List<TurnoDto>> listarTodos(){
-        List<TurnoDto> resultado = service.getAll();
+    public ResponseEntity<List<TurnoDto>> buscarTodos(){
+        List<TurnoDto> resultado = service.buscarTodos();
 
         return ResponseEntity.ok(resultado);
     }
+    @GetMapping("/buscar/{id}")
+    public TurnoDto buscarPorId(@PathVariable Integer id){
+        return  service.buscarPorId(id);
+    }
+
 }
